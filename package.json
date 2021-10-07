@@ -7,7 +7,8 @@
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build ./api -s",
     "build": "npm run clean && npm run build-babel",
-    "start": "npm run build && node ./build/server.js"
+    "start": "npm run build && node ./build/server.js",
+    "dev": "nodemon --exec babel-node ./api/server.js"
   },
   "author": "wavefly",
   "license": "MIT",
@@ -33,10 +34,12 @@
     "jest-environment-jsdom": "^27.1.0",
     "jsdom": "^17.0.0",
     "marked": "^3.0.2",
+    "moment": "^2.29.1",
     "mongoose": "^5.13.7",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
     "multer-s3": "^2.9.0",
+    "nodemon": "^2.0.13",
     "slugify": "^1.6.0",
     "webpack": "^3.12.0"
   },

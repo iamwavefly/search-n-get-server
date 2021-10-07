@@ -32,26 +32,46 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
+    ignoreUndefined: true,
   })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
 //-- assign route
 server.get("/", async (req, res) => {
-  const { search, employment_type, order_by, page } = req.query;
-  const response = await axios.get(
-    `https://findwork.dev/api/jobs/?search=${
-      search || `Java`
-    }&employment_type=${employment_type || "full time"}&order_by=${
-      order_by || "relevance"
-    }&page=${page || "1"}`,
-    {
-      headers: {
-        Authorization: `Token 3df821f44d18aea13176e8be288cd0de2cc0d652`,
+  const {
+    search,
+    employment_type,
+    order_by,
+    page = 1,
+    limit = 50,
+    remote,
+  } = req.query;
+  const filterOptions = {
+    $and: [
+      {
+        $or: [
+          { role: { $regex: search, $options: "i" } },
+          { keywords: search },
+        ],
       },
-    }
-  );
-  res.json(response.data);
+      { employment_type },
+      { remote },
+    ],
+  };
+  const posts = await Post.find(filterOptions)
+    .limit(limit * 1) //limit search result
+    .skip((page - 1) * limit) // skip docs
+    .sort({ date: order_by === "date" && "asc" }); // sort order
+  // count total posts
+  const count = await Post.countDocuments(filterOptions);
+  console.log(count);
+  res.status(200).json({
+    count: posts.length,
+    page,
+    totalPages: Math.ceil(count / limit),
+    results: posts,
+  });
 });
 server.use("/post/", postRoute);
 // `server started on ${chalk.bgYellow.bold("PORT")} ${chalk.bgRed.bold(PORT)}`

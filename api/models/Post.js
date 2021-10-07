@@ -4,21 +4,45 @@ import slugify from "slugify";
 // import { JSDOM } from "jsdom";
 import marked from "marked";
 const PostSchema = new mongoose.Schema({
-  title: {
+  id: {
+    type: String,
+  },
+  role: {
     type: String,
     required: true,
   },
-  content: {
+  company_name: {
+    type: String,
+  },
+  company_num_employees: {
+    type: String,
+  },
+  employment_type: {
+    type: String,
+  },
+  location: {
+    type: String,
+  },
+  remote: {
+    type: Boolean,
+    required: true,
+  },
+  logo: {
+    type: String,
+  },
+  text: {
     type: String,
     required: true,
   },
-  thumbnail: {
-    type: String,
+  date_posted: {
+    type: Date,
+    required: true,
   },
-  tags: {
+  keywords: {
     type: Array,
+    required: true,
   },
-  category: {
+  source: {
     type: String,
     required: true,
   },
@@ -31,15 +55,11 @@ const PostSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  approvalCode: {
-    type: String,
-    required: true,
+  approved: {
+    type: Boolean,
+    default: true,
   },
-  postStatus: {
-    type: String,
-    required: true,
-  },
-  date: {
+  date_added: {
     type: Date,
     default: Date.now(),
   },
@@ -49,14 +69,14 @@ const PostSchema = new mongoose.Schema({
 // const createDomPurify = dompurify(new JSDOM().window);
 
 PostSchema.pre("validate", function (next) {
-  if (this.title) {
-    this.slug = slugify(this.title, {
+  if (this.role) {
+    this.slug = slugify(this.role + "_" + this.id, {
       lower: true,
       strict: true,
     });
   }
-  if (this.content) {
-    this.sanitizedHtml = marked(this.content);
+  if (this.text) {
+    this.sanitizedHtml = marked(this.text);
   }
   next();
 });
