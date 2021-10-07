@@ -40,7 +40,7 @@ mongoose
 //-- assign route
 server.get("/", async (req, res) => {
   const {
-    search,
+    search = "react",
     employment_type,
     order_by,
     page = 1,
@@ -65,7 +65,7 @@ server.get("/", async (req, res) => {
     .sort({ date: order_by === "date" && "asc" }); // sort order
   // count total posts
   const count = await Post.countDocuments(filterOptions);
-  console.log(count);
+  // response
   res.status(200).json({
     count: posts.length,
     page,
