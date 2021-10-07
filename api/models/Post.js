@@ -25,7 +25,6 @@ const PostSchema = new mongoose.Schema({
   },
   remote: {
     type: Boolean,
-    required: true,
   },
   logo: {
     type: String,
