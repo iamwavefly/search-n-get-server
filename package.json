@@ -8,7 +8,9 @@
     "build-babel": "babel -d ./build ./api -s",
     "build": "npm run clean && npm run build-babel",
     "start": "npm run build && node ./build/server.js",
-    "dev": "nodemon --exec babel-node ./api/server.js"
+    "client": "npm start --prefix client",
+    "server": "nodemon --exec babel-node ./api/server.js",
+    "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "author": "wavefly",
   "license": "MIT",
@@ -25,6 +27,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "chalk": "^4.1.2",
+    "concurrently": "^6.3.0",
     "cors": "^2.8.5",
     "dompurify": "^2.3.1",
     "dotenv": "^10.0.0",
