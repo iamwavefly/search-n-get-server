@@ -10,6 +10,7 @@ import cors from "cors";
 import Post from "./models/Post.js";
 // -- routes
 import postRoute from "./routes/post.js";
+import userRoute from "./routes/user.js";
 // -- private keys
 import { mongoURI } from "./config/keys.js";
 import axios from "axios";
@@ -17,7 +18,7 @@ import axios from "axios";
 const server = express();
 
 //middleware
-server.use(express.urlencoded({ extended: true }));
+server.use(express.urlencoded({ extended: false }));
 server.use(express.json());
 server.use(morgan("dev"));
 server.use(cors());
@@ -74,6 +75,7 @@ server.get("/", async (req, res) => {
   });
 });
 server.use("/post/", postRoute);
+server.use("/user/", userRoute);
 // `server started on ${chalk.bgYellow.bold("PORT")} ${chalk.bgRed.bold(PORT)}`
 
 // port listener
